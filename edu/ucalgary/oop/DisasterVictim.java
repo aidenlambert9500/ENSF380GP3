@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class DisasterVictim {
     private String firstName;
     private String lastName;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String comments;
     private int ASSIGNED_SOCIAL_ID;
     private MedicalRecord[] medicalRecords;
@@ -17,7 +17,7 @@ public class DisasterVictim {
     private String ENTRY_DATE;
     private Supply[] personalBelongings;
     private String gender;
-    private int counter;
+    private static int counter = 0;
 
     // all getter functions
     public String getFirstName() {
@@ -29,7 +29,7 @@ public class DisasterVictim {
     }
 
     public String getDateOfBirth() {
-        return this.dateOfBirth;
+        return this.dateOfBirth.toString();
     }
 
     public String getComments() {
@@ -63,9 +63,13 @@ public class DisasterVictim {
     // default constructor
     public DisasterVictim(String firstName, String ENTRY_DATE) {
         this.firstName = firstName;
-        medicalRecords = new MedicalRecord[0];
-        familyConnections = new FamilyRelation[0];
-        personalBelongings = new Supply[0];
+        this.medicalRecords = new MedicalRecord[0];
+        this.familyConnections = new FamilyRelation[0];
+        this.personalBelongings = new Supply[0];
+        this.ASSIGNED_SOCIAL_ID = counter;
+        counter++;
+        
+        
         try {
             LocalDate entryDate = null;
             try {
@@ -96,19 +100,9 @@ public class DisasterVictim {
 
     public void setDateOfBirth(String dateOfBirth) throws IllegalArgumentException {
         try {
-            LocalDate dob = null;
-            try {
-                dob = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            } catch (DateTimeParseException e1) {
-                dob = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            }
-            LocalDate currentDate = LocalDate.now();
-            if (dob.isAfter(currentDate)) {
-                throw new IllegalArgumentException("Date of birth cannot be in the future.");
-            }
-            this.dateOfBirth = dateOfBirth;
+            this.dateOfBirth = LocalDate.parse(dateOfBirth);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Please use either yyyy-MM-dd or dd/MM/yyyy.");
+            throw new IllegalArgumentException("Invalid date format. Please provide the date in the format 'YYYY-MM-DD'.");
         }
     }
 
@@ -131,6 +125,10 @@ public class DisasterVictim {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public void setPersonalBelongings(Supply[] supplies){
+        this.personalBelongings = supplies;
     }
 
     public void addPersonalBelonging(Supply supply) throws IllegalArgumentException {
