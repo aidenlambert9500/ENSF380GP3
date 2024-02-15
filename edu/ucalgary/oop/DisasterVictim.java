@@ -1,9 +1,10 @@
 package edu.ucalgary.oop;
 
-import java.sql.Date;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 public class DisasterVictim {
     private String firstName;
@@ -50,7 +51,7 @@ public class DisasterVictim {
     public String getEntryDate() {
         return this.ENTRY_DATE;
     }
-
+    
     public Supply[] getPersonalBelongings() {
         return this.personalBelongings;
     }
@@ -62,9 +63,9 @@ public class DisasterVictim {
     // default constructor
     public DisasterVictim(String firstName, String ENTRY_DATE) {
         this.firstName = firstName;
-        medicalRecords = new MedicalRecord[];
-        familyConnections = new FamilyRelation[];
-        personalBelongings = new Supply[];
+        medicalRecords = new MedicalRecord[0];
+        familyConnections = new FamilyRelation[0];
+        personalBelongings = new Supply[0];
         try {
             LocalDate entryDate = null;
             try {
@@ -121,17 +122,11 @@ public class DisasterVictim {
     }
 
     public void setMedicalRecords(MedicalRecord[] medicalRecords) throws IllegalArgumentException {
-        this.medicalRecords.clear();
-        for (MedicalRecord record : medicalRecords) {
-            this.medicalRecords.add(record);
-        }
+        this.medicalRecords = medicalRecords;
     }
 
     public void setFamilyConnections(FamilyRelation[] familyConnections) throws IllegalArgumentException {
-        this.familyConnections.clear();
-        for (FamilyRelation relation : familyConnections) {
-            this.familyConnections.add(relation);
-        }
+        this.familyConnections = familyConnections;
     }
 
     public void setGender(String gender) {
@@ -139,23 +134,82 @@ public class DisasterVictim {
     }
 
     public void addPersonalBelonging(Supply supply) throws IllegalArgumentException {
-        personalBelongings.add(supply);
+        if (personalBelongings == null) {
+            personalBelongings = new Supply[1];
+            personalBelongings[0] = supply;
+        } else {
+            Supply[] newArray = new Supply[personalBelongings.length + 1];
+            System.arraycopy(personalBelongings, 0, newArray, 0, personalBelongings.length);
+            newArray[personalBelongings.length] = supply;
+            personalBelongings = newArray;
+        }
     }
 
     public void removePersonalBelonging(Supply supply) throws IllegalArgumentException {
-        personalBelongings.remove(supply);
+        if (personalBelongings == null) {
+            throw new IllegalArgumentException("Personal belongings array is null");
+        }
+        int indexToRemove = -1;
+        for (int i = 0; i < personalBelongings.length; i++) {
+            if (personalBelongings[i].equals(supply)) {
+                indexToRemove = i;
+                break;
+            }
+        }
+        if (indexToRemove != -1) {
+            Supply[] newArray = new Supply[personalBelongings.length - 1];
+            System.arraycopy(personalBelongings, 0, newArray, 0, indexToRemove);
+            System.arraycopy(personalBelongings, indexToRemove + 1, newArray, indexToRemove,
+                    personalBelongings.length - indexToRemove - 1);
+            personalBelongings = newArray;
+        } else {
+            throw new IllegalArgumentException("Personal belonging not found");
+        }
     }
 
     public void addFamilyConnection(FamilyRelation familyConnection) throws IllegalArgumentException {
-        familyConnections.add(familyConnection);
+        if (familyConnections == null) {
+            familyConnections = new FamilyRelation[1];
+            familyConnections[0] = familyConnection;
+        } else {
+            FamilyRelation[] newArray = new FamilyRelation[familyConnections.length + 1];
+            System.arraycopy(familyConnections, 0, newArray, 0, familyConnections.length);
+            newArray[familyConnections.length] = familyConnection;
+            familyConnections = newArray;
+        }
     }
 
     public void removeFamilyConnection(FamilyRelation familyConnection) throws IllegalArgumentException {
-        familyConnections.remove(familyConnection);
+        if (familyConnections == null) {
+            throw new IllegalArgumentException("Family connections array is null");
+        }
+        int indexToRemove = -1;
+        for (int i = 0; i < familyConnections.length; i++) {
+            if (familyConnections[i].equals(familyConnection)) {
+                indexToRemove = i;
+                break;
+            }
+        }
+        if (indexToRemove != -1) {
+            FamilyRelation[] newArray = new FamilyRelation[familyConnections.length - 1];
+            System.arraycopy(familyConnections, 0, newArray, 0, indexToRemove);
+            System.arraycopy(familyConnections, indexToRemove + 1, newArray, indexToRemove,
+                    familyConnections.length - indexToRemove - 1);
+            familyConnections = newArray;
+        } else {
+            throw new IllegalArgumentException("Family connection not found");
+        }
     }
 
     public void addMedicalRecord(MedicalRecord medicalRecord) throws IllegalArgumentException {
-        medicalRecords.add(medicalRecord);
+        if (medicalRecords == null) {
+            medicalRecords = new MedicalRecord[1];
+            medicalRecords[0] = medicalRecord;
+        } else {
+            MedicalRecord[] newArray = new MedicalRecord[medicalRecords.length + 1];
+            System.arraycopy(medicalRecords, 0, newArray, 0, medicalRecords.length);
+            newArray[medicalRecords.length] = medicalRecord;
+            medicalRecords = newArray;
+        }
     }
-
 }
