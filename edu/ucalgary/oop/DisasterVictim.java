@@ -71,19 +71,10 @@ public class DisasterVictim {
         
         
         try {
-            LocalDate entryDate = null;
-            try {
-                entryDate = LocalDate.parse(ENTRY_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            } catch (DateTimeParseException e1) {
-                entryDate = LocalDate.parse(ENTRY_DATE, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            }
-            LocalDate currentDate = LocalDate.now();
-            if (entryDate.isAfter(currentDate)) {
-                throw new IllegalArgumentException("Date of birth cannot be in the future.");
-            }
+            LocalDate entryDate = LocalDate.parse(ENTRY_DATE, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             this.ENTRY_DATE = ENTRY_DATE;
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Please use either yyyy-MM-dd or dd/MM/yyyy.");
+            throw new IllegalArgumentException("Invalid date format. Please use the format 'yyyy-MM-dd'.");
         }
 
     }
@@ -100,7 +91,8 @@ public class DisasterVictim {
 
     public void setDateOfBirth(String dateOfBirth) throws IllegalArgumentException {
         try {
-            this.dateOfBirth = LocalDate.parse(dateOfBirth);
+            LocalDate parsedDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            this.dateOfBirth = parsedDate;
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Please provide the date in the format 'YYYY-MM-DD'.");
         }
